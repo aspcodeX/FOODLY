@@ -1,7 +1,10 @@
 
 const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
 
-// Supported cuisine filters
+// ======================================
+// FOODLY CUISINE DATABASE
+// ======================================
+
 export const CUISINES = {
   Indian: "Indian",
   Japanese: "Japanese",
@@ -9,16 +12,35 @@ export const CUISINES = {
   Mexican: "Mexican"
 };
 
-// Fetch data from TheMealDB
+// Accept alternate names too
+const CUISINE_ALIASES = {
+  indian: "Indian",
+  india: "Indian",
+
+  japanese: "Japanese",
+  japan: "Japanese",
+
+  italian: "Italian",
+  italy: "Italian",
+
+  mexican: "Mexican",
+  mexico: "Mexican"
+};
+
+// ======================================
+// API FETCH FUNCTION
+// ======================================
+
 async function fetchMeals(endpoint) {
   try {
     const response = await fetch(`${BASE_URL}/${endpoint}`);
 
     if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
+      throw new Error(`HTTP Error: ${response.status}`);
     }
 
     const data = await response.json();
+
     return data.meals || [];
 
   } catch (error) {
@@ -27,7 +49,10 @@ async function fetchMeals(endpoint) {
   }
 }
 
-// Remove duplicate recipes using their meal ID
+// ======================================
+// REMOVE DUPLICATE RECIPES
+// ======================================
+
 function removeDuplicates(meals) {
   const uniqueMeals = new Map();
 
@@ -40,7 +65,10 @@ function removeDuplicates(meals) {
   return [...uniqueMeals.values()];
 }
 
-// Get random recipes
+// ======================================
+// GET RANDOM RECIPES
+// ======================================
+
 export async function getRandomMeals(count = 6) {
   const requests = Array.from(
     { length: count },
@@ -52,9 +80,14 @@ export async function getRandomMeals(count = 6) {
   return removeDuplicates(results.flat());
 }
 
-// Search recipes by name
+// ======================================
+// SEARCH RECIPES
+// ======================================
+
 export async function searchMeals(query) {
-  if (!query || !query.trim()) return [];
+  if (!query || !query.trim()) {
+    return [];
+  }
 
   const meals = await fetchMeals(
     `search.php?s=${encodeURIComponent(query.trim())}`
@@ -63,38 +96,55 @@ export async function searchMeals(query) {
   return removeDuplicates(meals);
 }
 
-// Get recipes by cuisine
-export async function filterMealsByArea(area) {
-  const cuisine = Object.keys(CUISINES).find(
-    key => key.toLowerCase() === area?.trim().toLowerCase()
-  );
+// ======================================
+// FILTER BY CUISINE
+// ======================================
 
-  if (!cuisine) {
+export async function filterMealsByArea(area) {
+  if (!area || typeof area !== "string") {
+    return [];
+  }
+
+  const normalizedArea = CUISINE_ALIASES[
+    area.trim().toLowerCase()
+  ];
+
+  if (!normalizedArea) {
     console.warn("FOODLY: Unsupported cuisine:", area);
     return [];
   }
 
   const meals = await fetchMeals(
-    `filter.php?a=${encodeURIComponent(CUISINES[cuisine])}`
+    `filter.php?a=${encodeURIComponent(normalizedArea)}`
   );
 
   return removeDuplicates(meals);
 }
 
-// Get recipes by category
+// ======================================
+// FILTER BY CATEGORY
+// ======================================
+
 export async function filterMealsByCategory(category) {
-  if (!category) return [];
+  if (!category || !category.trim()) {
+    return [];
+  }
 
   const meals = await fetchMeals(
-    `filter.php?c=${encodeURIComponent(category)}`
+    `filter.php?c=${encodeURIComponent(category.trim())}`
   );
 
   return removeDuplicates(meals);
 }
 
-// Get full recipe details using meal ID
+// ======================================
+// GET FULL RECIPE DETAILS
+// ======================================
+
 export async function getMealById(id) {
-  if (!id) return null;
+  if (!id) {
+    return null;
+  }
 
   const meals = await fetchMeals(
     `lookup.php?i=${encodeURIComponent(id)}`
@@ -103,7 +153,10 @@ export async function getMealById(id) {
   return meals[0] || null;
 }
 
-// Get all available cuisine names
+// ======================================
+// GET AVAILABLE CUISINES
+// ======================================
+
 export function getAvailableCuisines() {
   return Object.keys(CUISINES);
 }
