@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>  
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#FFF3E8">
+  <meta name="description" content="FOODLY — Discover, cook and enjoy delicious recipes.">
+
+  <title>FOODLY — Discover. Cook. Enjoy.</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js" defer></script>
+  <script type="module" src="js/main.js"></script>
+</head>
+
+<body>
+
+  <!-- INTRO -->
+  <div id="intro-screen" class="intro-screen">
+    <div class="intro-content">
+
+      <div class="intro-plate-stage">
+        <div class="intro-plate-shadow"></div>
+
+        <div class="intro-plate">
+          <div class="intro-plate-inner"></div>
+          <div class="intro-plate-center"></div>
+        </div>
+
+        <svg class="intro-fork" viewBox="0 0 50 120" fill="none" aria-hidden="true">
+          <path d="M12 5V36 M20 5V36 M28 5V36 M36 5V36"
+                stroke="#493B70" stroke-width="3" stroke-linecap="round"/>
+          <path d="M12 36C12 50 36 50 36 36"
+                stroke="#493B70" stroke-width="3"/>
+          <path d="M24 48V112"
+                stroke="#493B70" stroke-width="4" stroke-linecap="round"/>
+        </svg>
+
+        <span class="intro-spark spark-one">✦</span>
+        <span class="intro-spark spark-two">✧</span>
+      </div>
+
+      <div class="intro-brand">
+        <h1>FOODLY<span>.</span></h1>
+        <p>DISCOVER. COOK. ENJOY.</p>
+      </div>
+
+      <div class="intro-loader"><span></span></div>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <a href="#home" class="logo">FOODLY<span>.</span></a>
+
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+      <a href="#home">Home</a>
+      <a href="#explore">Explore</a>
+      <a href="#trending">Recipes</a>
+      <a href="#about">About</a>
+    </nav>
+
+    <div class="nav-actions">
+      <button class="nav-fav" id="showFavorites" type="button">
+        ♡ <span>Favourites</span>
+      </button>
+
+      <button class="menu-toggle" id="menuToggle" type="button"
+              aria-label="Toggle menu" aria-expanded="false">
+        ☰
+      </button>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero section" id="home">
+      <div class="hero-copy">
+        <span class="eyebrow">YOUR DAILY FOOD INSPIRATION</span>
+
+        <h1>
+          Good food.<br>
+          <em>Good mood.</em>
+        </h1>
+
+        <p>
+          Discover recipes worth sharing. Find your next favourite
+          dish and bring something delicious to your table.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="#trending" class="btn btn-primary">Explore recipes ↗</a>
+          <a href="#explore" class="btn btn-secondary">Discover cuisines</a>
+        </div>
+
+        <div class="hero-note">
+          <span>✦</span> A little inspiration for every meal.
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-orbit orbit-one"></div>
+        <div class="hero-orbit orbit-two"></div>
+
+       <div id="food3d" class="food-3d"></div>
+
+        <div class="floating-label label-top">MADE WITH LOVE ✦</div>
+        <div class="floating-label label-bottom">FRESH IDEAS DAILY</div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee" aria-label="Discover, cook, enjoy and share">
+      <div class="marquee-track" aria-hidden="true">
+        <span>DISCOVER</span> ✦ <span>COOK</span> ✦
+        <span>ENJOY</span> ✦ <span>SHARE</span> ✦
+        <span>DISCOVER</span> ✦ <span>COOK</span> ✦
+        <span>ENJOY</span> ✦ <span>SHARE</span> ✦
+      </div>
+    </div>
+
+    <!-- CUISINES -->
+    <section class="section cuisine-section" id="explore">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">EXPLORE THE WORLD</span>
+          <h2>Pick your <em>flavour.</em></h2>
+        </div>
+        <p>Different cultures. Different tastes. Endless inspiration.</p>
+      </div>
+
+      <div class="cuisine-grid">
+        <button class="cuisine-card indian" data-area="Indian" type="button">
+          <span class="cuisine-emoji">🍛</span>
+          <span class="cuisine-name">Indian</span>
+          <span class="cuisine-caption">Bold & spicy</span>
+          <span class="cuisine-arrow">↗</span>
+        </button>
+
+        <button class="cuisine-card italian" data-area="Italian" type="button">
+          <span class="cuisine-emoji">🍕</span>
+          <span class="cuisine-name">Italian</span>
+          <span class="cuisine-caption">Simply delicious</span>
+          <span class="cuisine-arrow">↗</span>
+        </button>
+
+        <button class="cuisine-card japanese" data-area="Japanese" type="button">
+          <span class="cuisine-emoji">🍣</span>
+          <span class="cuisine-name">Japanese</span>
+          <span class="cuisine-caption">Fresh & balanced</span>
+          <span class="cuisine-arrow">↗</span>
+        </button>
+
+        <button class="cuisine-card mexican" data-area="Mexican" type="button">
+          <span class="cuisine-emoji">🌮</span>
+          <span class="cuisine-name">Mexican</span>
+          <span class="cuisine-caption">Colourful & vibrant</span>
+          <span class="cuisine-arrow">↗</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- TRENDING -->
+    <section class="section trending-section" id="trending">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">FRESH FROM THE KITCHEN</span>
+          <h2>Trending <em>recipes.</em></h2>
+        </div>
+        <a href="#search" class="text-link">Find something else ↗</a>
+      </div>
+
+      <div class="recipe-grid" id="recipeGrid" aria-live="polite">
+        <div class="loading-message">Finding something delicious...</div>
+      </div>
+
+      <button class="btn btn-secondary load-more" id="loadMore" type="button">
+        Load more recipes +
+      </button>
+    </section>
+
+    <!-- EDITORIAL -->
+    <section class="editorial section" id="about">
+      <div class="editorial-art">
+        <span>✦</span>
+        <div class="editorial-plate">🥗</div>
+        <span>✧</span>
+      </div>
+
+      <div class="editorial-copy">
+        <span class="eyebrow">A LITTLE FOOD PHILOSOPHY</span>
+        <h2>Cooking is an art.<br><em>Eating is a joy.</em></h2>
+
+        <p>
+          Great food doesn't need to be complicated.
+          Explore new flavours, try new recipes and make
+          every meal a little more special.
+        </p>
+
+        <a href="#trending" class="btn btn-primary">Get inspired ↗</a>
+      </div>
+    </section>
+
+    <!-- SEARCH -->
+    <section class="section search-section" id="search">
+      <span class="eyebrow">WHAT ARE YOU CRAVING?</span>
+      <h2>Find your next <em>favourite.</em></h2>
+
+      <form id="searchForm" class="search-form">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search pasta, chicken, dessert..."
+          autocomplete="off"
+          required
+        >
+        <button type="submit">Search ↗</button>
+      </form>
+
+      <p id="searchStatus" class="search-status" aria-live="polite"></p>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter section">
+      <div>
+        <span class="eyebrow">A TASTE OF INSPIRATION</span>
+        <h2>Good things are <em>cooking.</em></h2>
+        <p>Get fresh food inspiration whenever you visit FOODLY.</p>
+      </div>
+
+      <a href="#trending" class="btn btn-primary">Explore now ↗</a>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+
+    <div class="footer-top">
+      <div class="footer-brand-info">
+        <a href="#home" class="logo">FOODLY<span>.</span></a>
+        <p>Good food. Great stories. Better memories.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="#home">Home</a>
+        <a href="#explore">Explore</a>
+        <a href="#trending">Recipes</a>
+        <a href="#about">About</a>
+      </nav>
+    </div>
+
+    <!-- OVERSIZED BRAND WORDMARK -->
+    <div class="footer-big-brand" aria-label="FOODLY">
+      FOODLY<span>.</span>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2026 FOODLY. ALL RIGHTS RESERVED.</span>
+      <span>DISCOVER. COOK. ENJOY.</span>
+      <a href="#home">BACK TO TOP ↑</a>
+    </div>
+
+  </footer>
+
+  <!-- RECIPE MODAL -->
+  <dialog id="recipeModal" class="recipe-modal">
+    <button class="modal-close" id="modalClose" type="button"
+            aria-label="Close recipe">×</button>
+    <div id="modalContent"></div>
+  </dialog>
+
+  <!-- TOAST -->
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+</body>
+</html>
