@@ -1,54 +1,109 @@
-const API_BASE = "https://www.themealdb.com/api/json/v1/1";
 
-async function apiRequest(endpoint) {
+const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
+
+// Supported cuisine filters
+export const CUISINES = {
+  Indian: "Indian",
+  Japanese: "Japanese",
+  Italian: "Italian",
+  Mexican: "Mexican"
+};
+
+// Fetch data from TheMealDB
+async function fetchMeals(endpoint) {
   try {
-    const response = await fetch(`${API_BASE}/${endpoint}`);
+    const response = await fetch(`${BASE_URL}/${endpoint}`);
 
     if (!response.ok) {
-      throw new Error(`API error: ${response.status}`);
+      throw new Error(`API Error: ${response.status}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data.meals || [];
+
   } catch (error) {
-    console.error("FOODLY API error:", error);
-    throw error;
+    console.error("FOODLY API Error:", error);
+    return [];
   }
 }
 
+// Remove duplicate recipes using their meal ID
+function removeDuplicates(meals) {
+  const uniqueMeals = new Map();
+
+  meals.forEach(meal => {
+    if (meal?.idMeal) {
+      uniqueMeals.set(meal.idMeal, meal);
+    }
+  });
+
+  return [...uniqueMeals.values()];
+}
+
+// Get random recipes
 export async function getRandomMeals(count = 6) {
   const requests = Array.from(
     { length: count },
-    () => apiRequest("random.php")
+    () => fetchMeals("random.php")
   );
 
-  const results = await Promise.allSettled(requests);
+  const results = await Promise.all(requests);
 
-  return results
-    .filter(result => result.status === "fulfilled")
-    .map(result => result.value.meals?.[0])
-    .filter(Boolean);
+  return removeDuplicates(results.flat());
 }
 
+// Search recipes by name
 export async function searchMeals(query) {
-  const data = await apiRequest(
-    `search.php?s=${encodeURIComponent(query)}`
+  if (!query || !query.trim()) return [];
+
+  const meals = await fetchMeals(
+    `search.php?s=${encodeURIComponent(query.trim())}`
   );
 
-  return data.meals || [];
+  return removeDuplicates(meals);
 }
 
+// Get recipes by cuisine
 export async function filterMealsByArea(area) {
-  const data = await apiRequest(
-    `filter.php?a=${encodeURIComponent(area)}`
+  const cuisine = Object.keys(CUISINES).find(
+    key => key.toLowerCase() === area?.trim().toLowerCase()
   );
 
-  return data.meals || [];
+  if (!cuisine) {
+    console.warn("FOODLY: Unsupported cuisine:", area);
+    return [];
+  }
+
+  const meals = await fetchMeals(
+    `filter.php?a=${encodeURIComponent(CUISINES[cuisine])}`
+  );
+
+  return removeDuplicates(meals);
 }
 
+// Get recipes by category
+export async function filterMealsByCategory(category) {
+  if (!category) return [];
+
+  const meals = await fetchMeals(
+    `filter.php?c=${encodeURIComponent(category)}`
+  );
+
+  return removeDuplicates(meals);
+}
+
+// Get full recipe details using meal ID
 export async function getMealById(id) {
-  const data = await apiRequest(
+  if (!id) return null;
+
+  const meals = await fetchMeals(
     `lookup.php?i=${encodeURIComponent(id)}`
   );
 
-  return data.meals?.[0] || null;
+  return meals[0] || null;
+}
+
+// Get all available cuisine names
+export function getAvailableCuisines() {
+  return Object.keys(CUISINES);
 }
