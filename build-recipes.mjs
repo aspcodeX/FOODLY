@@ -12,15 +12,25 @@ const SOURCES = [
   { type: "area", value: "Chinese" }
 ];
 
+// ========================================
+// FETCH API DATA
+// ========================================
+
 async function fetchJSON(url) {
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`API request failed: ${response.status} — ${url}`);
+    throw new Error(
+      `API request failed: ${response.status} — ${url}`
+    );
   }
 
   return response.json();
 }
+
+// ========================================
+// HTML ESCAPING
+// ========================================
 
 function escapeHTML(value = "") {
   return String(value).replace(/[&<>"']/g, (char) => ({
@@ -32,6 +42,10 @@ function escapeHTML(value = "") {
   })[char]);
 }
 
+// ========================================
+// SLUG GENERATOR
+// ========================================
+
 function slugify(value) {
   return String(value)
     .toLowerCase()
@@ -40,6 +54,10 @@ function slugify(value) {
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-|-$/g, "");
 }
+
+// ========================================
+// EXTRACT INGREDIENTS
+// ========================================
 
 function getIngredients(meal) {
   const ingredients = [];
@@ -58,6 +76,10 @@ function getIngredients(meal) {
 
   return ingredients;
 }
+
+// ========================================
+// RECIPE STRUCTURED DATA
+// ========================================
 
 function makeRecipeSchema(meal, ingredients, url) {
   const instructions = (meal.strInstructions || "")
@@ -93,8 +115,13 @@ function makeRecipeSchema(meal, ingredients, url) {
   return JSON.stringify(schema).replace(/</g, "\\u003c");
 }
 
+// ========================================
+// GENERATE RECIPE HTML
+// ========================================
+
 function makeRecipeHTML(meal, ingredients, url) {
   const title = escapeHTML(meal.strMeal);
+
   const description = escapeHTML(
     `Discover how to make ${meal.strMeal} with ingredients and step-by-step cooking instructions on FOODLY.`
   );
@@ -118,7 +145,11 @@ function makeRecipeHTML(meal, ingredients, url) {
     </li>
   `).join("");
 
-  const schema = makeRecipeSchema(meal, ingredients, url);
+  const schema = makeRecipeSchema(
+    meal,
+    ingredients,
+    url
+  );
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -127,8 +158,10 @@ function makeRecipeHTML(meal, ingredients, url) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>${title} Recipe | FOODLY</title>
+
   <meta name="description" content="${description}">
   <meta name="robots" content="index, follow">
+
   <link rel="canonical" href="${url}">
 
   <meta property="og:type" content="article">
@@ -145,7 +178,11 @@ function makeRecipeHTML(meal, ingredients, url) {
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet"
+  >
 
   <script type="application/ld+json">${schema}</script>
 
@@ -158,7 +195,9 @@ function makeRecipeHTML(meal, ingredients, url) {
       --line: #e8e1d7;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -168,7 +207,9 @@ function makeRecipeHTML(meal, ingredients, url) {
       line-height: 1.7;
     }
 
-    a { color: inherit; }
+    a {
+      color: inherit;
+    }
 
     .nav {
       padding: 22px 7%;
@@ -205,7 +246,8 @@ function makeRecipeHTML(meal, ingredients, url) {
       font-weight: 700;
     }
 
-    h1, h2 {
+    h1,
+    h2 {
       font-family: "Instrument Serif", serif;
       font-weight: 400;
       line-height: 1.1;
@@ -248,7 +290,10 @@ function makeRecipeHTML(meal, ingredients, url) {
       padding: 28px;
     }
 
-    ul, ol { padding: 0; }
+    ul,
+    ol {
+      padding: 0;
+    }
 
     .ingredients {
       list-style: none;
@@ -290,7 +335,9 @@ function makeRecipeHTML(meal, ingredients, url) {
       font-weight: 700;
     }
 
-    .instructions p { margin: 2px 0; }
+    .instructions p {
+      margin: 2px 0;
+    }
 
     .source {
       display: inline-block;
@@ -308,9 +355,18 @@ function makeRecipeHTML(meal, ingredients, url) {
     }
 
     @media (max-width: 700px) {
-      .content { grid-template-columns: 1fr; gap: 25px; }
-      main { margin: 35px auto; }
-      .panel { padding: 20px; }
+      .content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      main {
+        margin: 35px auto;
+      }
+
+      .panel {
+        padding: 20px;
+      }
     }
   </style>
 </head>
@@ -323,6 +379,7 @@ function makeRecipeHTML(meal, ingredients, url) {
 
   <main>
     <p class="eyebrow">FOODLY · Recipe</p>
+
     <h1>${title}</h1>
 
     <p class="meta">
@@ -340,8 +397,10 @@ function makeRecipeHTML(meal, ingredients, url) {
     <p>${description}</p>
 
     <div class="content">
+
       <section class="panel">
         <h2>Ingredients</h2>
+
         <ul class="ingredients">
           ${ingredientHTML || "<li>Ingredients unavailable.</li>"}
         </ul>
@@ -349,18 +408,25 @@ function makeRecipeHTML(meal, ingredients, url) {
 
       <section class="panel">
         <h2>How to make it</h2>
+
         <ol class="instructions">
           ${instructionHTML || "<li>Instructions unavailable.</li>"}
         </ol>
       </section>
+
     </div>
 
     ${meal.strSource ? `
-      <a class="source" href="${escapeHTML(meal.strSource)}"
-         target="_blank" rel="noopener noreferrer">
+      <a
+        class="source"
+        href="${escapeHTML(meal.strSource)}"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         View original recipe source ↗
       </a>
     ` : ""}
+
   </main>
 
   <footer>
@@ -369,6 +435,10 @@ function makeRecipeHTML(meal, ingredients, url) {
 </body>
 </html>`;
 }
+
+// ========================================
+// GET RECIPE IDS
+// ========================================
 
 async function getMealIDs() {
   const allIDs = new Set();
@@ -382,15 +452,25 @@ async function getMealIDs() {
       const data = await fetchJSON(`${API}/${endpoint}`);
 
       for (const meal of data.meals || []) {
-        if (meal.idMeal) allIDs.add(meal.idMeal);
+        if (meal.idMeal) {
+          allIDs.add(meal.idMeal);
+        }
       }
+
     } catch (error) {
-      console.error(`Could not load ${source.value}:`, error.message);
+      console.error(
+        `Could not load ${source.value}:`,
+        error.message
+      );
     }
   }
 
   return [...allIDs].slice(0, 60);
 }
+
+// ========================================
+// GET COMPLETE RECIPE DETAILS
+// ========================================
 
 async function getAllDetails(ids) {
   const meals = [];
@@ -401,10 +481,18 @@ async function getAllDetails(ids) {
     const results = await Promise.all(
       batch.map(async (id) => {
         try {
-          const data = await fetchJSON(`${API}/lookup.php?i=${id}`);
+          const data = await fetchJSON(
+            `${API}/lookup.php?i=${id}`
+          );
+
           return data.meals?.[0] || null;
+
         } catch (error) {
-          console.error(`Could not load recipe ${id}:`, error.message);
+          console.error(
+            `Could not load recipe ${id}:`,
+            error.message
+          );
+
           return null;
         }
       })
@@ -416,49 +504,106 @@ async function getAllDetails(ids) {
   return meals;
 }
 
+// ========================================
+// COPY PROJECT FILES INTO DIST
+// ========================================
+
+async function copyProjectFiles() {
+  await fs.mkdir(OUTPUT_DIR, {
+    recursive: true
+  });
+
+  const excludedFolders = new Set([
+    "node_modules",
+    ".git",
+    ".vercel",
+    "dist"
+  ]);
+
+  const rootEntries = await fs.readdir(".", {
+    withFileTypes: true
+  });
+
+  for (const entry of rootEntries) {
+    if (excludedFolders.has(entry.name)) {
+      continue;
+    }
+
+    await fs.cp(
+      entry.name,
+      `${OUTPUT_DIR}/${entry.name}`,
+      {
+        recursive: true
+      }
+    );
+  }
+
+  console.log("Project files copied to dist.");
+}
+
+// ========================================
+// MAIN BUILD FUNCTION
+// ========================================
+
 async function build() {
   console.log("Building FOODLY...");
 
-  await fs.rm(OUTPUT_DIR, { recursive: true, force: true });
-
-  await fs.cp(".", OUTPUT_DIR, {
+  // Clean previous build
+  await fs.rm(OUTPUT_DIR, {
     recursive: true,
-    filter: (source) => {
-      const excluded = [
-        "/node_modules",
-        "/.git",
-        "/.vercel",
-        "/dist"
-      ];
-
-      return !excluded.some((folder) =>
-        source.replaceAll("\\", "/").includes(folder)
-      );
-    }
+    force: true
   });
 
+  // FIXED: Copy files individually instead of
+  // copying the project folder into its own subfolder
+  await copyProjectFiles();
+
+  // Fetch recipe IDs
   const ids = await getMealIDs();
+
   console.log(`Found ${ids.length} recipe IDs.`);
 
-  const meals = await getAllDetails(ids);
-  const recipeRecords = [];
-  const sitemapURLs = [`${SITE_URL}/`];
+  if (!ids.length) {
+    throw new Error(
+      "No recipes received from TheMealDB API. Build stopped."
+    );
+  }
 
+  // Fetch recipe details
+  const meals = await getAllDetails(ids);
+
+  const recipeRecords = [];
+
+  const sitemapURLs = [
+    `${SITE_URL}/`
+  ];
+
+  // Generate individual recipe pages
   for (const meal of meals) {
-    if (!meal.strMeal || !meal.idMeal || !meal.strMealThumb) {
+    if (
+      !meal.strMeal ||
+      !meal.idMeal ||
+      !meal.strMealThumb
+    ) {
       continue;
     }
 
     const slug = `${slugify(meal.strMeal)}-${meal.idMeal}`;
-    const relativePath = `recipes/${slug}/index.html`;
-    const outputPath = `${OUTPUT_DIR}/${relativePath}`;
-    const url = `${SITE_URL}/recipes/${slug}/`;
+
+    const outputPath =
+      `${OUTPUT_DIR}/recipes/${slug}/index.html`;
+
+    const url =
+      `${SITE_URL}/recipes/${slug}/`;
 
     const ingredients = getIngredients(meal);
 
-    await fs.mkdir(`${OUTPUT_DIR}/recipes/${slug}`, {
-      recursive: true
-    });
+    await fs.mkdir(
+      `${OUTPUT_DIR}/recipes/${slug}`,
+      {
+        recursive: true
+      }
+    );
 
     await fs.writeFile(
       outputPath,
@@ -477,9 +622,24 @@ async function build() {
     });
 
     sitemapURLs.push(url);
+
+    console.log(`Generated: ${slug}`);
   }
 
-  await fs.mkdir(`${OUTPUT_DIR}/data`, { recursive: true });
+  // Check generated pages
+  if (!recipeRecords.length) {
+    throw new Error(
+      "No complete recipe pages were generated."
+    );
+  }
+
+  // Generate recipe index JSON
+  await fs.mkdir(
+    `${OUTPUT_DIR}/data`,
+    {
+      recursive: true
+    }
+  );
 
   await fs.writeFile(
     `${OUTPUT_DIR}/data/recipes.json`,
@@ -487,17 +647,35 @@ async function build() {
     "utf8"
   );
 
+  // Generate sitemap
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${sitemapURLs.map((url) => `  <url><loc>${escapeHTML(url)}</loc></url>`).join("\n")}
 </urlset>`;
 
-  await fs.writeFile(`${OUTPUT_DIR}/sitemap.xml`, sitemap, "utf8");
+  await fs.writeFile(
+    `${OUTPUT_DIR}/sitemap.xml`,
+    sitemap,
+    "utf8"
+  );
 
-  console.log(`FOODLY build complete! Generated ${recipeRecords.length} recipe pages.`);
+  // Build summary
+  console.log("");
+  console.log("================================");
+  console.log("       FOODLY BUILD SUCCESS");
+  console.log("================================");
+  console.log(`Recipe pages: ${recipeRecords.length}`);
+  console.log(`Sitemap URLs: ${sitemapURLs.length}`);
+  console.log(`Output folder: ${OUTPUT_DIR}`);
+  console.log("================================");
 }
+
+// ========================================
+// RUN BUILD
+// ========================================
 
 build().catch((error) => {
   console.error("FOODLY build failed:", error);
+
   process.exitCode = 1;
 });
