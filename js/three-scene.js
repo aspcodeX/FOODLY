@@ -1,235 +1,225 @@
 
-/* FOODLY — THREE.JS PASTA BOWL */
-
 import * as THREE from "three";
 
 export function createFoodScene(container) {
-  if (!container) return null;
+  if (!container) return;
 
   const scene = new THREE.Scene();
-  scene.background = null;
+  scene.background = new THREE.Color("#fff4e9");
 
-  const camera = new THREE.PerspectiveCamera(
-    38,
-    container.clientWidth / container.clientHeight,
-    0.1,
-    100
-  );
-
-  camera.position.set(0, 4.5, 8.5);
-  camera.lookAt(0, 0.3, 0);
+  const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+  camera.position.set(0, 4.4, 9);
+  camera.lookAt(0, 0.35, 0);
 
   const renderer = new THREE.WebGLRenderer({
-    alpha: true,
-    antialias: true
+    antialias: true,
+    alpha: false
   });
 
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(container.clientWidth, container.clientHeight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.2;
 
   container.appendChild(renderer.domElement);
 
-  const bowl = new THREE.Group();
-  scene.add(bowl);
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xd5bba5, 2));
 
-  // Bowl exterior
-  const bowlGeometry = new THREE.SphereGeometry(
-    2.2, 64, 32, 0, Math.PI * 2, 0, Math.PI * 0.48
-  );
-
-  const bowlMaterial = new THREE.MeshStandardMaterial({
-    color: 0xf6eee3,
-    roughness: 0.28,
-    metalness: 0.03
-  });
-
-  const bowlMesh = new THREE.Mesh(bowlGeometry, bowlMaterial);
-  bowlMesh.scale.y = 0.75;
-  bowlMesh.position.y = 0.1;
-  bowlMesh.rotation.x = Math.PI;
-  bowlMesh.castShadow = true;
-  bowlMesh.receiveShadow = true;
-  bowl.add(bowlMesh);
-
-  // Pasta bed
-  const pastaMaterial = new THREE.MeshStandardMaterial({
-    color: 0xe7a83d,
-    roughness: 0.65
-  });
-
-  const pastaGroup = new THREE.Group();
-  pastaGroup.position.y = 0.85;
-  bowl.add(pastaGroup);
-
-  // Curved pasta strands
-  for (let i = 0; i < 38; i++) {
-    const curve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-1.2, 0, -0.4),
-      new THREE.Vector3(-0.5, 0.2, 0.3),
-      new THREE.Vector3(0.2, 0.05, -0.2),
-      new THREE.Vector3(0.8, 0.25, 0.4),
-      new THREE.Vector3(1.2, 0.05, -0.1)
-    ]);
-
-    const points = curve.getPoints(30);
-    const geometry = new THREE.TubeGeometry(
-      curve,
-      30,
-      0.045,
-      8,
-      false
-    );
-
-    const strand = new THREE.Mesh(geometry, pastaMaterial);
-    strand.rotation.y = Math.random() * Math.PI * 2;
-    strand.rotation.x = (Math.random() - 0.5) * 0.6;
-    strand.position.set(
-      (Math.random() - 0.5) * 1.4,
-      Math.random() * 0.3,
-      (Math.random() - 0.5) * 1.4
-    );
-
-    pastaGroup.add(strand);
-  }
-
-  // Tomato pieces
-  const tomatoMaterial = new THREE.MeshStandardMaterial({
-    color: 0xe94f36,
-    roughness: 0.45
-  });
-
-  for (let i = 0; i < 9; i++) {
-    const tomato = new THREE.Mesh(
-      new THREE.SphereGeometry(0.17, 20, 20),
-      tomatoMaterial
-    );
-
-    const angle = (i / 9) * Math.PI * 2;
-    const radius = 0.85;
-
-    tomato.position.set(
-      Math.cos(angle) * radius,
-      0.2 + Math.random() * 0.12,
-      Math.sin(angle) * radius
-    );
-
-    tomato.scale.set(1, 0.8, 1);
-    pastaGroup.add(tomato);
-  }
-
-  // Basil leaves
-  const basilMaterial = new THREE.MeshStandardMaterial({
-    color: 0x5b8a45,
-    roughness: 0.7,
-    side: THREE.DoubleSide
-  });
-
-  for (let i = 0; i < 6; i++) {
-    const leaf = new THREE.Mesh(
-      new THREE.SphereGeometry(0.18, 16, 12),
-      basilMaterial
-    );
-
-    leaf.scale.set(0.65, 0.12, 1.5);
-    leaf.position.set(
-      (Math.random() - 0.5) * 1.3,
-      0.35,
-      (Math.random() - 0.5) * 1.3
-    );
-
-    leaf.rotation.y = Math.random() * Math.PI;
-    pastaGroup.add(leaf);
-  }
-
-  // Lighting
-  const ambientLight = new THREE.AmbientLight(0xffffff, 2);
-  scene.add(ambientLight);
-
-  const keyLight = new THREE.DirectionalLight(0xffffff, 3);
-  keyLight.position.set(4, 7, 5);
-  keyLight.castShadow = true;
-  scene.add(keyLight);
-
-  const fillLight = new THREE.PointLight(0xffa66b, 45);
-  fillLight.position.set(-4, 2, -3);
-  scene.add(fillLight);
+  const light = new THREE.DirectionalLight(0xffffff, 3);
+  light.position.set(-4, 8, 6);
+  light.castShadow = true;
+  scene.add(light);
 
   // Ground shadow
   const ground = new THREE.Mesh(
-    new THREE.CircleGeometry(3, 64),
-    new THREE.ShadowMaterial({ opacity: 0.13 })
+    new THREE.CircleGeometry(5, 64),
+    new THREE.ShadowMaterial({ opacity: 0.18 })
   );
 
   ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -1.05;
+  ground.position.y = -0.08;
   ground.receiveShadow = true;
   scene.add(ground);
 
-  // Interaction
-  let pointerX = 0;
-  let pointerY = 0;
+  const dish = new THREE.Group();
+  scene.add(dish);
+
+  // Ceramic bowl
+  const bowlMaterial = new THREE.MeshStandardMaterial({
+    color: 0xfffdf8,
+    roughness: 0.25
+  });
+
+  const bowlPoints = [
+    new THREE.Vector2(0, 0.12),
+    new THREE.Vector2(0.7, 0.12),
+    new THREE.Vector2(1.3, 0.2),
+    new THREE.Vector2(1.75, 0.38),
+    new THREE.Vector2(2, 0.67),
+    new THREE.Vector2(2.02, 0.72),
+    new THREE.Vector2(1.85, 0.7),
+    new THREE.Vector2(1.65, 0.48),
+    new THREE.Vector2(1.2, 0.32),
+    new THREE.Vector2(0.6, 0.27),
+    new THREE.Vector2(0, 0.27)
+  ];
+
+  const bowl = new THREE.Mesh(
+    new THREE.LatheGeometry(bowlPoints, 96),
+    bowlMaterial
+  );
+
+  bowl.castShadow = true;
+  bowl.receiveShadow = true;
+  dish.add(bowl);
+
+  // All toppings stay inside the bowl.
+  const food = new THREE.Group();
+  dish.add(food);
+
+  const pastaMaterial = new THREE.MeshStandardMaterial({
+    color: 0xf6ad35,
+    roughness: 0.45
+  });
+
+  const tomatoMaterial = new THREE.MeshStandardMaterial({
+    color: 0xef4935,
+    roughness: 0.5
+  });
+
+  const basilMaterial = new THREE.MeshStandardMaterial({
+    color: 0x4d8a42,
+    roughness: 0.6,
+    side: THREE.DoubleSide
+  });
+
+  // Spaghetti nest
+  function createSpaghetti(index) {
+    const points = [];
+
+    const phase = index * 1.71;
+    const radius = 0.22 + (index % 5) * 0.12;
+    const turns = 1.5 + (index % 4) * 0.2;
+
+    for (let i = 0; i <= 100; i++) {
+      const t = i / 100;
+      const angle = phase + t * Math.PI * 2 * turns;
+
+      const r = radius + 0.18 * Math.sin(t * Math.PI);
+
+      const x = Math.cos(angle) * r;
+      const z = Math.sin(angle) * r;
+
+      // Lower height keeps spaghetti inside the bowl.
+      const y =
+        0.43 +
+        0.07 * Math.sin(t * Math.PI * 2 + phase);
+
+      points.push(new THREE.Vector3(x, y, z));
+    }
+
+    const curve = new THREE.CatmullRomCurve3(points);
+
+    const strand = new THREE.Mesh(
+      new THREE.TubeGeometry(curve, 100, 0.035, 8, false),
+      pastaMaterial
+    );
+
+    strand.castShadow = true;
+    food.add(strand);
+  }
+
+  for (let i = 0; i < 26; i++) {
+    createSpaghetti(i);
+  }
+
+  // Tomato pieces
+  for (let i = 0; i < 7; i++) {
+    const angle = i * 2.399;
+    const radius = 0.3 + (i % 3) * 0.25;
+
+    const tomato = new THREE.Mesh(
+      new THREE.SphereGeometry(0.13, 24, 18),
+      tomatoMaterial
+    );
+
+    tomato.scale.set(1, 0.75, 1);
+
+    tomato.position.set(
+      Math.cos(angle) * radius,
+      0.56,
+      Math.sin(angle) * radius
+    );
+
+    tomato.castShadow = true;
+    food.add(tomato);
+  }
+
+  // Basil leaves
+  for (let i = 0; i < 5; i++) {
+    const angle = i * 2.2;
+
+    const leaf = new THREE.Mesh(
+      new THREE.SphereGeometry(0.15, 20, 14),
+      basilMaterial
+    );
+
+    leaf.scale.set(1.4, 0.12, 0.55);
+    leaf.rotation.y = angle;
+
+    leaf.position.set(
+      Math.cos(angle) * 0.4,
+      0.62,
+      Math.sin(angle) * 0.4
+    );
+
+    leaf.castShadow = true;
+    food.add(leaf);
+  }
+
+  // Position the whole bowl and food together.
+  dish.position.y = -0.18;
+
   let targetX = 0;
   let targetY = 0;
 
-  const onPointerMove = (event) => {
+  container.addEventListener("pointermove", (event) => {
     const rect = container.getBoundingClientRect();
 
-    pointerX = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-    pointerY = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-  };
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
 
-  container.addEventListener("pointermove", onPointerMove);
-
-  let animationId;
-  let isVisible = true;
-
-  const observer = new IntersectionObserver(([entry]) => {
-    isVisible = entry.isIntersecting;
+    targetY = (x - 0.5) * 0.22;
+    targetX = (y - 0.5) * 0.1;
   });
 
+  function resize() {
+    const width = Math.max(container.clientWidth, 1);
+    const height = Math.max(container.clientHeight, 1);
+
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    renderer.setSize(width, height, false);
+  }
+
+  const observer = new ResizeObserver(resize);
   observer.observe(container);
+  resize();
 
   function animate() {
-    animationId = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
 
-    if (!isVisible) return;
+    dish.rotation.y +=
+      (targetY - dish.rotation.y) * 0.035;
 
-    targetX += (pointerY * 0.12 - targetX) * 0.035;
-    targetY += (pointerX * 0.18 - targetY) * 0.035;
-
-    bowl.rotation.x = targetX;
-    bowl.rotation.y += 0.0025;
-    bowl.rotation.y += (targetY - bowl.rotation.y) * 0.02;
+    dish.rotation.x +=
+      (-0.04 + targetX - dish.rotation.x) * 0.035;
 
     renderer.render(scene, camera);
   }
 
   animate();
-
-  const resizeObserver = new ResizeObserver(() => {
-    const width = container.clientWidth;
-    const height = container.clientHeight;
-
-    if (!width || !height) return;
-
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-    renderer.setSize(width, height);
-  });
-
-  resizeObserver.observe(container);
-
-  return {
-    destroy() {
-      cancelAnimationFrame(animationId);
-      observer.disconnect();
-      resizeObserver.disconnect();
-      container.removeEventListener("pointermove", onPointerMove);
-      renderer.dispose();
-      container.replaceChildren();
-    }
-  };
 }
