@@ -1,0 +1,11 @@
+
+{
+  "name": "foodly",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "FOODLY - Discover delicious recipes and cooking inspiration",
+  "scripts": {
+    "build": "node build-recipes.mjs"
+  }
+}
