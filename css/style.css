@@ -1,7 +1,8 @@
 
 /* =========================================
-   FOODLY — COMPLETE MAIN STYLESHEET
+   FOODLY — JOURNAL EDITION
    Discover. Cook. Enjoy.
+   Design: Editorial / Italian Food Journal
 ========================================= */
 
 /* ROOT VARIABLES */
@@ -16,7 +17,7 @@
   --muted: #827B79;
 
   --radius: 22px;
-  --transition: 0.3s ease;
+  --transition: 0.35s ease;
   --shadow: 0 15px 40px rgba(36, 33, 43, 0.08);
 }
 
@@ -71,7 +72,7 @@ input:focus-visible {
   color: white;
 }
 
-/* COMMON SECTION */
+/* COMMON */
 
 .section {
   width: min(1200px, 90%);
@@ -104,8 +105,8 @@ input:focus-visible {
   position: sticky;
   top: 0;
   z-index: 1000;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid rgba(73, 59, 112, 0.08);
 }
 
@@ -166,29 +167,49 @@ input:focus-visible {
 }
 
 /* =========================================
-   HERO
+   HERO — JOURNAL EDITION
 ========================================= */
 
 .hero {
-  min-height: 610px;
+  width: min(1200px, 90%);
+  min-height: 680px;
+  margin: auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  gap: 40px;
+  gap: 35px;
+  padding: 65px 0;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 4;
+}
+
+.hero-copy::before {
+  content: "FOODLY JOURNAL NO. 001 / ITALIAN EDITION";
+  display: block;
+  margin-bottom: 32px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.3px;
+  color: var(--midnight);
 }
 
 .eyebrow {
   color: var(--papaya);
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 2px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
 }
 
 .hero h1 {
-  font-size: clamp(55px, 7vw, 92px);
-  line-height: 0.98;
-  letter-spacing: -6px;
-  margin: 22px 0;
+  max-width: 650px;
+  font-size: clamp(55px, 6.5vw, 88px);
+  line-height: 1.02;
+  letter-spacing: -5px;
+  margin: 18px 0;
   font-weight: 900;
 }
 
@@ -201,8 +222,8 @@ h2 em {
 }
 
 .hero-copy > p {
-  max-width: 470px;
-  color: var(--muted);
+  max-width: 490px;
+  color: var(--midnight);
   font-size: 14px;
   line-height: 1.9;
 }
@@ -211,15 +232,15 @@ h2 em {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
-  margin-top: 30px;
+  margin-top: 25px;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 48px;
-  padding: 0 23px;
+  min-height: 50px;
+  padding: 0 27px;
   border-radius: 50px;
   font-size: 11px;
   font-weight: 800;
@@ -257,9 +278,10 @@ h2 em {
 }
 
 .hero-note {
-  margin-top: 35px;
-  font-size: 10px;
-  color: var(--muted);
+  margin-top: 32px;
+  font-size: 11px;
+  color: var(--midnight);
+  letter-spacing: 0.5px;
 }
 
 .hero-note span {
@@ -267,11 +289,11 @@ h2 em {
 }
 
 /* =========================================
-   HERO VISUAL / THREE.JS
+   HERO VISUAL — THREE.JS PASTA BOWL
 ========================================= */
 
 .hero-visual {
-  height: 450px;
+  height: 480px;
   position: relative;
   display: grid;
   place-items: center;
@@ -389,7 +411,7 @@ h2 em {
 .search-section h2,
 .newsletter h2 {
   font-size: clamp(38px, 5vw, 58px);
-  line-height: 1.05;
+  line-height: 1.08;
   letter-spacing: -3px;
   margin-top: 12px;
 }
@@ -444,10 +466,7 @@ h2 em {
   box-shadow: var(--shadow);
 }
 
-.american {
-  background: #F8C99D;
-}
-
+.american,
 .indian {
   background: #F8C99D;
 }
@@ -510,7 +529,8 @@ h2 em {
 }
 
 .recipe-card {
-  background: white;
+  background: #FFFAF5;
+  border: 1px solid rgba(73, 59, 112, 0.07);
   border-radius: var(--radius);
   overflow: hidden;
   cursor: pointer;
@@ -611,13 +631,13 @@ h2 em {
 ========================================= */
 
 .editorial {
-  width: min(1340px, 90%);
-  min-height: 620px;
+  width: min(1200px, 90%);
+  min-height: 560px;
   display: grid;
-  grid-template-columns: 0.95fr 1.05fr;
+  grid-template-columns: 0.9fr 1.1fr;
   align-items: center;
-  gap: 75px;
-  padding: 100px 0;
+  gap: 65px;
+  padding: 90px 0;
 }
 
 .editorial-art {
@@ -715,7 +735,7 @@ h2 em {
   max-width: 650px;
   margin: auto;
   padding: 7px;
-  background: white;
+  background: #FFFAF5;
   border-radius: 60px;
   display: flex;
   box-shadow: 0 10px 30px rgba(36, 33, 43, 0.06);
@@ -761,20 +781,36 @@ h2 em {
 ========================================= */
 
 .newsletter {
-  width: min(1500px, 90%);
-  min-height: 290px;
-  background: #EBDCCF;
-  border-radius: 38px;
-  padding: 65px 70px;
+  width: min(1200px, 90%);
+  min-height: 340px;
+  background: transparent;
+  border-radius: 0;
+  border-top: 1px solid rgba(73, 59, 112, 0.14);
+  border-bottom: 1px solid rgba(73, 59, 112, 0.14);
+  padding: 75px 0;
   margin: 0 auto 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 35px;
+  position: relative;
+}
+
+.newsletter::before {
+  content: "✳";
+  position: absolute;
+  top: 35px;
+  left: 0;
+  color: var(--papaya);
+  font-size: 19px;
+}
+
+.newsletter > div {
+  max-width: 800px;
 }
 
 .newsletter h2 {
-  font-size: clamp(42px, 5vw, 72px);
+  font-size: clamp(42px, 5vw, 70px);
   line-height: 1.05;
   letter-spacing: -4px;
   margin-top: 15px;
@@ -785,10 +821,10 @@ h2 em {
 }
 
 .newsletter p {
-  color: var(--muted);
-  font-size: 13px;
+  color: var(--midnight);
+  font-size: 14px;
   margin-top: 17px;
-  line-height: 1.8;
+  line-height: 1.9;
 }
 
 .newsletter .btn {
@@ -798,15 +834,16 @@ h2 em {
 }
 
 /* =========================================
-   FOOTER — OVERSIZED BRAND EDITION
+   FOOTER — JOURNAL EDITION
 ========================================= */
 
 .footer {
-  background: var(--midnight);
-  color: var(--vanilla);
+  background: var(--vanilla);
+  color: var(--midnight);
   padding: 65px 5% 25px;
   overflow: hidden;
   position: relative;
+  border-top: 1px solid rgba(73, 59, 112, 0.12);
 }
 
 .footer-top {
@@ -830,7 +867,7 @@ h2 em {
 
 .footer-brand-info p {
   margin-top: 12px;
-  color: #AAA3AE;
+  color: var(--muted);
   font-size: 11px;
   line-height: 1.7;
 }
@@ -843,7 +880,7 @@ h2 em {
 }
 
 .footer-links a {
-  color: var(--vanilla);
+  color: var(--midnight);
   font-size: 11px;
   font-weight: 700;
   transition: color var(--transition);
@@ -862,7 +899,7 @@ h2 em {
   line-height: 0.8;
   white-space: nowrap;
   text-align: center;
-  color: var(--vanilla);
+  color: var(--midnight);
   padding: 25px 0 45px;
   user-select: none;
   pointer-events: none;
@@ -873,7 +910,7 @@ h2 em {
 }
 
 .footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid rgba(73, 59, 112, 0.15);
   padding-top: 22px;
   display: flex;
   justify-content: space-between;
@@ -884,7 +921,7 @@ h2 em {
 
 .footer-bottom span,
 .footer-bottom a {
-  color: #AAA3AE;
+  color: var(--muted);
   font-size: 9px;
   font-weight: 600;
   letter-spacing: 1px;
@@ -1017,7 +1054,11 @@ h2 em {
 @media (max-width: 900px) {
   .hero {
     grid-template-columns: 1fr;
-    padding-top: 70px;
+    padding-top: 65px;
+    text-align: center;
+  }
+
+  .hero-copy::before {
     text-align: center;
   }
 
@@ -1027,6 +1068,10 @@ h2 em {
 
   .hero-buttons {
     justify-content: center;
+  }
+
+  .hero-note {
+    text-align: center;
   }
 
   .hero-visual {
@@ -1044,7 +1089,7 @@ h2 em {
   }
 
   .newsletter {
-    padding: 45px;
+    padding: 65px 0;
   }
 }
 
@@ -1082,8 +1127,18 @@ h2 em {
     padding: 70px 0;
   }
 
+  .hero {
+    padding-top: 45px;
+    gap: 15px;
+  }
+
+  .hero-copy::before {
+    font-size: 9px;
+    letter-spacing: 1px;
+  }
+
   .hero h1 {
-    font-size: clamp(50px, 12vw, 75px);
+    font-size: clamp(48px, 12vw, 75px);
     letter-spacing: -4px;
   }
 
@@ -1141,16 +1196,19 @@ h2 em {
 
   .newsletter {
     width: 90%;
-    padding: 35px 25px;
+    padding: 65px 0;
     flex-direction: column;
     align-items: flex-start;
-    border-radius: 25px;
     margin-bottom: 65px;
   }
 
   .newsletter h2 {
     font-size: 42px;
     letter-spacing: -2px;
+  }
+
+  .newsletter .btn {
+    margin-top: 5px;
   }
 
   .footer {
