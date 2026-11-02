@@ -1,234 +1,268 @@
-import {
-  getRandomMeals,
-  searchMeals,
-  filterMealsByArea,
-  getMealById
-} from "./api.js";
 
-import {
-  renderRecipes,
-  showFavorites
-} from "./recipes.js";
+/* FOODLY — MAIN JAVASCRIPT */
 
-import { initScrollAnimations } from "./animations.js";
-import { initThreeScene } from "./three-scene.js";
+import { recipes } from "./recipes.js";
+import { createFoodScene } from "./three-scene.js";
 
-/* =================================
-   FOODLY INTRO
-================================= */
+const $ = (selector) => document.querySelector(selector);
 
-function initIntro() {
-  const intro = document.getElementById("intro-screen");
+const recipeGrid = $("#recipeGrid");
+const searchForm = $("#searchForm");
+const searchInput = $("#searchInput");
+const modal = $("#recipeModal");
+const modalBody = $("#modalBody");
+const toast = $("#toast");
 
-  if (!intro) return;
+let activeCuisine = "All";
+let toastTimer;
 
-  const reducedMotion = window.matchMedia(
-    "(prefers-reduced-motion: reduce)"
-  ).matches;
+// INTRO
+const intro = $("#introScreen");
 
-  const duration = reducedMotion ? 500 : 1800;
+window.addEventListener("load", () => {
+  setTimeout(() => {
+    intro?.classList.add("hidden");
+  }, 1000);
+});
 
-  window.setTimeout(() => {
-    intro.classList.add("intro-exit");
+// THREE.JS
+const foodContainer = $("#food3d");
 
-    window.setTimeout(() => {
-      intro.remove();
-    }, 400);
-
-  }, duration);
+if (foodContainer) {
+  try {
+    createFoodScene(foodContainer);
+  } catch (error) {
+    console.error("3D scene could not load:", error);
+    foodContainer.innerHTML = `
+      <div class="fallback-food">🍝</div>
+    `;
+  }
 }
 
-/* =================================
-   TOAST
-================================= */
-
+// TOAST
 function showToast(message) {
-  const toast = document.getElementById("toast");
-
   if (!toast) return;
 
   toast.textContent = message;
   toast.classList.add("show");
 
-  window.setTimeout(() => {
+  clearTimeout(toastTimer);
+
+  toastTimer = setTimeout(() => {
     toast.classList.remove("show");
-  }, 2000);
+  }, 2500);
 }
 
-/* =================================
-   RECIPE LOADING
-================================= */
+// RECIPE CARD TEMPLATE
+function recipeTemplate(recipe) {
+  return `
+    <article class="recipe-card" data-id="${recipe.id}" tabindex="0">
+      <div class="recipe-image" style="background:${recipe.color}">
+        <span class="recipe-tag">${recipe.category}</span>
+        <span class="recipe-emoji">${recipe.emoji}</span>
+      </div>
 
-let currentOffset = 0;
-let isLoading = false;
-
-async function loadTrending(append = false) {
-  if (isLoading) return;
-
-  isLoading = true;
-
-  const grid = document.getElementById("recipeGrid");
-
-  if (!append) {
-    grid.innerHTML =
-      '<div class="loading-message">Finding something delicious...</div>';
-  }
-
-  try {
-    const meals = await getRandomMeals(6);
-
-    if (!meals.length) {
-      throw new Error("No recipes returned");
-    }
-
-    currentOffset += meals.length;
-
-    renderRecipes(meals, append);
-
-    // Refresh scroll animations for newly added cards
-    initScrollAnimations();
-
-  } catch (error) {
-    console.error(error);
-
-    grid.innerHTML =
-      '<div class="empty-message">Could not load recipes. Please check your internet and try again.</div>';
-
-  } finally {
-    isLoading = false;
-  }
+      <div class="recipe-info">
+        <div class="recipe-meta">${recipe.time} · ${recipe.difficulty}</div>
+        <h3>${recipe.name}</h3>
+        <p>${recipe.description}</p>
+      </div>
+    </article>
+  `;
 }
 
-/* =================================
-   SEARCH
-================================= */
+// RENDER RECIPES
+function renderRecipes(list = recipes) {
+  if (!recipeGrid) return;
 
-const searchForm = document.getElementById("searchForm");
-const searchInput = document.getElementById("searchInput");
-const searchStatus = document.getElementById("searchStatus");
-
-searchForm.addEventListener("submit", async event => {
-  event.preventDefault();
-
-  const query = searchInput.value.trim();
-
-  if (!query) return;
-
-  searchStatus.textContent = "Searching delicious recipes...";
-
-  try {
-    const meals = await searchMeals(query);
-
-    renderRecipes(meals);
-
-    searchStatus.textContent = meals.length
-      ? `${meals.length} recipes found for "${query}".`
-      : `No recipes found for "${query}".`;
-
-    document.getElementById("trending").scrollIntoView({
-      behavior: "smooth"
-    });
-
-  } catch (error) {
-    searchStatus.textContent =
-      "Search failed. Please try again.";
+  if (!list.length) {
+    recipeGrid.innerHTML = `
+      <p class="no-results">No recipes found. Try another search!</p>
+    `;
+    return;
   }
-});
 
-/* =================================
-   CUISINE FILTER
-================================= */
+  recipeGrid.innerHTML = list.map(recipeTemplate).join("");
+}
 
-document.querySelectorAll(".cuisine-card").forEach(card => {
-  card.addEventListener("click", async () => {
-    const area = card.dataset.area;
+// FILTER RECIPES
+function filterRecipes() {
+  const query = searchInput?.value.trim().toLowerCase() || "";
 
-    const grid = document.getElementById("recipeGrid");
+  const filtered = recipes.filter((recipe) => {
+    const matchesCuisine =
+      activeCuisine === "All" || recipe.category === activeCuisine;
 
-    grid.innerHTML =
-      '<div class="loading-message">Exploring this cuisine...</div>';
-
-    document.getElementById("trending").scrollIntoView({
-      behavior: "smooth"
-    });
-
-    try {
-      const meals = await filterMealsByArea(area);
-
-      // The filter endpoint returns basic meal information.
-      // Fetch individual details to keep recipe cards consistent.
-      const detailedMeals = await Promise.all(
-        meals.slice(0, 6).map(meal => getMealById(meal.idMeal))
+    const matchesSearch =
+      recipe.name.toLowerCase().includes(query) ||
+      recipe.category.toLowerCase().includes(query) ||
+      recipe.description.toLowerCase().includes(query) ||
+      recipe.ingredients.some((ingredient) =>
+        ingredient.toLowerCase().includes(query)
       );
 
-      renderRecipes(detailedMeals.filter(Boolean));
+    return matchesCuisine && matchesSearch;
+  });
 
-      searchStatus.textContent = `${area} cuisine selected.`;
+  renderRecipes(filtered);
+}
 
-      initScrollAnimations();
+// OPEN RECIPE DETAILS
+function openRecipe(id) {
+  const recipe = recipes.find((item) => item.id === Number(id));
 
-    } catch (error) {
-      grid.innerHTML =
-        '<div class="empty-message">Could not load this cuisine. Please try again.</div>';
-    }
+  if (!recipe || !modal || !modalBody) return;
+
+  modalBody.innerHTML = `
+    <div style="font-size:65px;margin-bottom:15px">${recipe.emoji}</div>
+    <p class="eyebrow">${recipe.category} · ${recipe.time}</p>
+    <h2>${recipe.name}</h2>
+    <p>${recipe.description}</p>
+
+    <h3 style="margin-top:25px">Ingredients</h3>
+    <ul>
+      ${recipe.ingredients.map((item) => `<li>${item}</li>`).join("")}
+    </ul>
+
+    <h3 style="margin-top:25px">Let's make it</h3>
+    <ol>
+      ${recipe.steps.map((step) => `<li>${step}</li>`).join("")}
+    </ol>
+  `;
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeModal() {
+  modal?.classList.remove("active");
+  modal?.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+// RECIPE CARD CLICK
+recipeGrid?.addEventListener("click", (event) => {
+  const card = event.target.closest(".recipe-card");
+  if (card) openRecipe(card.dataset.id);
+});
+
+recipeGrid?.addEventListener("keydown", (event) => {
+  if (event.key !== "Enter" && event.key !== " ") return;
+
+  const card = event.target.closest(".recipe-card");
+  if (!card) return;
+
+  event.preventDefault();
+  openRecipe(card.dataset.id);
+});
+
+// MODAL EVENTS
+$("#modalClose")?.addEventListener("click", closeModal);
+
+modal?.addEventListener("click", (event) => {
+  if (event.target === modal) closeModal();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") closeModal();
+});
+
+// SEARCH
+searchForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  activeCuisine = "All";
+  filterRecipes();
+  $("#recipes")?.scrollIntoView({ behavior: "smooth" });
+});
+
+// LIVE SEARCH
+searchInput?.addEventListener("input", filterRecipes);
+
+// CUISINE FILTER
+document.querySelectorAll("[data-cuisine]").forEach((card) => {
+  card.addEventListener("click", () => {
+    activeCuisine = card.dataset.cuisine;
+    filterRecipes();
   });
 });
 
-/* =================================
-   LOAD MORE
-================================= */
+// MOBILE NAVIGATION
+const menuToggle = $("#menuToggle");
+const navLinks = $(".nav-links");
 
-document.getElementById("loadMore")
-  .addEventListener("click", () => {
-    loadTrending(true);
-  });
-
-/* =================================
-   FAVOURITES
-================================= */
-
-document.getElementById("showFavorites")
-  .addEventListener("click", () => {
-    showFavorites();
-  });
-
-/* =================================
-   MOBILE NAVIGATION
-================================= */
-
-const menuToggle = document.getElementById("menuToggle");
-const navLinks = document.getElementById("navLinks");
-
-menuToggle.addEventListener("click", () => {
-  navLinks.classList.toggle("open");
-
-  menuToggle.textContent =
-    navLinks.classList.contains("open") ? "×" : "☰";
+menuToggle?.addEventListener("click", () => {
+  const isOpen = navLinks?.classList.toggle("open");
+  menuToggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
 });
 
-navLinks.querySelectorAll("a").forEach(link => {
+navLinks?.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     navLinks.classList.remove("open");
-    menuToggle.textContent = "☰";
+    menuToggle?.setAttribute("aria-expanded", "false");
   });
 });
 
-/* =================================
-   START WEBSITE
-================================= */
+// SCROLL REVEALS
+const revealElements = document.querySelectorAll(
+  ".section-heading, .section-topline, .cuisine-card, .recipe-card, .editorial-copy, .newsletter-section"
+);
 
-// Intro runs independently from network and 3D loading.
-initIntro();
+revealElements.forEach((element) => element.classList.add("reveal"));
 
-// Start the 3D model in the background.
-initThreeScene();
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.12 }
+  );
 
-// Start scroll animations independently.
-initScrollAnimations();
-
-// Load recipes after the first page render.
-if ("requestIdleCallback" in window) {
-  requestIdleCallback(() => loadTrending(), { timeout: 1000 });
+  revealElements.forEach((element) => revealObserver.observe(element));
 } else {
-  window.setTimeout(() => loadTrending(), 150);
+  revealElements.forEach((element) => element.classList.add("visible"));
 }
+
+// GSAP ANIMATIONS
+if (window.gsap) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from(".hero-copy > *", {
+    y: 30,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.1,
+    ease: "power3.out",
+    delay: 1.1
+  });
+
+  gsap.from(".hero-visual", {
+    scale: 0.9,
+    opacity: 0,
+    duration: 1.2,
+    ease: "power3.out",
+    delay: 1.2
+  });
+
+  gsap.utils.toArray(".editorial-image").forEach((element) => {
+    gsap.from(element, {
+      scrollTrigger: {
+        trigger: element,
+        start: "top 85%"
+      },
+      opacity: 0,
+      x: -40,
+      duration: 1
+    });
+  });
+}
+
+// INITIALIZE
+renderRecipes();
+
+console.log("FOODLY is ready! 🍝");
