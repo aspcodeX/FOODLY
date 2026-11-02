@@ -19,9 +19,48 @@ let requestId = 0;
 let modalRequestId = 0;
 let previousFocus = null;
 
-// Escape HTML to prevent unsafe API content from becoming markup
+// ========================================
+// GENERATED SEO RECIPE PAGE INDEX
+// ========================================
+
+const recipePages = new Map();
+
+async function loadRecipePages() {
+  try {
+    const response = await fetch("/data/recipes.json");
+
+    if (!response.ok) {
+      throw new Error("Recipe page index unavailable");
+    }
+
+    const recipes = await response.json();
+
+    recipePages.clear();
+
+    recipes.forEach((recipe) => {
+      if (recipe.id && recipe.url) {
+        recipePages.set(String(recipe.id), recipe.url);
+      }
+    });
+
+    console.log(
+      `Loaded ${recipePages.size} SEO recipe pages.`
+    );
+
+  } catch (error) {
+    console.warn(
+      "Static recipe links unavailable:",
+      error
+    );
+  }
+}
+
+// ========================================
+// HTML ESCAPING
+// ========================================
+
 function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, char => ({
+  return String(value).replace(/[&<>"']/g, (char) => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
@@ -30,7 +69,10 @@ function escapeHTML(value = "") {
   }[char]));
 }
 
-// Loading state
+// ========================================
+// LOADING STATE
+// ========================================
+
 function loading() {
   grid.setAttribute("aria-busy", "true");
 
@@ -42,7 +84,10 @@ function loading() {
   `;
 }
 
-// Render recipe cards
+// ========================================
+// RENDER RECIPE CARDS
+// ========================================
+
 function renderMeals(meals) {
   grid.setAttribute("aria-busy", "false");
 
@@ -52,52 +97,77 @@ function renderMeals(meals) {
         No recipes found. Try another search.
       </div>
     `;
+
     return;
   }
 
-  grid.innerHTML = meals.slice(0, 12).map((meal, index) => `
-    <article
-      class="recipe-card"
-      data-id="${escapeHTML(meal.idMeal)}"
-      tabindex="0"
-      role="button"
-      aria-label="View recipe: ${escapeHTML(meal.strMeal)}"
-    >
-      <div class="recipe-image">
-        <img
-          src="${escapeHTML(meal.strMealThumb || "")}"
-          alt="${escapeHTML(meal.strMeal)} recipe"
-          loading="lazy"
-          decoding="async"
+  grid.innerHTML = meals.slice(0, 12).map((meal, index) => {
+    const recipeId = String(meal.idMeal);
+    const recipeURL = recipePages.get(recipeId);
+
+    const recipeAction = recipeURL
+      ? `
+        <a
+          class="recipe-open recipe-page-link"
+          href="${escapeHTML(recipeURL)}"
+          aria-label="Read full ${escapeHTML(meal.strMeal)} recipe"
         >
-      </div>
-
-      <div class="recipe-info">
-        <div class="recipe-meta">
-          <span>FOODLY PICK ${index + 1}</span>
-          <span>RECIPE ↗</span>
-        </div>
-
-        <h3>${escapeHTML(meal.strMeal)}</h3>
-
+          Read full recipe ↗
+        </a>
+      `
+      : `
         <span class="recipe-open">
           Discover recipe ↗
         </span>
-      </div>
-    </article>
-  `).join("");
+      `;
+
+    return `
+      <article
+        class="recipe-card"
+        data-id="${escapeHTML(recipeId)}"
+        tabindex="0"
+        role="button"
+        aria-label="View recipe: ${escapeHTML(meal.strMeal)}"
+      >
+        <div class="recipe-image">
+          <img
+            src="${escapeHTML(meal.strMealThumb || "")}"
+            alt="${escapeHTML(meal.strMeal)} recipe"
+            loading="lazy"
+            decoding="async"
+          >
+        </div>
+
+        <div class="recipe-info">
+          <div class="recipe-meta">
+            <span>FOODLY PICK ${index + 1}</span>
+            <span>RECIPE ↗</span>
+          </div>
+
+          <h3>${escapeHTML(meal.strMeal)}</h3>
+
+          ${recipeAction}
+        </div>
+      </article>
+    `;
+  }).join("");
 }
 
-// Load recipes
+// ========================================
+// LOAD RECIPES
+// ========================================
+
 async function loadRecipes(query = "", area = "") {
   const current = ++requestId;
 
   loading();
 
   $("#recipeStatus").textContent =
-    area ? `${area} favourites` :
-    query ? `Search results for ${query}` :
-    "A few favourites to get you started.";
+    area
+      ? `${area} favourites`
+      : query
+        ? `Search results for ${query}`
+        : "A few favourites to get you started.";
 
   try {
     const meals = area
@@ -119,6 +189,7 @@ async function loadRecipes(query = "", area = "") {
     grid.innerHTML = `
       <div class="api-message">
         <p>Recipe kitchen is temporarily unavailable.</p>
+
         <button
           class="retry-button"
           id="retryRecipes"
@@ -135,7 +206,10 @@ async function loadRecipes(query = "", area = "") {
   }
 }
 
-// Open recipe modal
+// ========================================
+// OPEN RECIPE MODAL
+// ========================================
+
 async function openRecipe(id) {
   if (!id) return;
 
@@ -172,7 +246,8 @@ async function openRecipe(id) {
       if (ingredient) {
         ingredients += `
           <li>
-            ${escapeHTML(measure)} ${escapeHTML(ingredient)}
+            ${escapeHTML(measure || "")}
+            ${escapeHTML(ingredient)}
           </li>
         `;
       }
@@ -183,6 +258,7 @@ async function openRecipe(id) {
       meal.strInstructions || "Instructions unavailable."
     );
 
+    // Original recipe source
     const sourceLink = meal.strSource
       ? `
         <a
@@ -196,6 +272,7 @@ async function openRecipe(id) {
       `
       : "";
 
+    // Recipe video
     const videoLink = meal.strYoutube
       ? `
         <a
@@ -205,6 +282,20 @@ async function openRecipe(id) {
           rel="noopener noreferrer"
         >
           Watch recipe video ↗
+        </a>
+      `
+      : "";
+
+    // Individual SEO page link
+    const recipeURL = recipePages.get(String(meal.idMeal));
+
+    const fullRecipeLink = recipeURL
+      ? `
+        <a
+          class="modal-source"
+          href="${escapeHTML(recipeURL)}"
+        >
+          Open full recipe page ↗
         </a>
       `
       : "";
@@ -232,9 +323,12 @@ async function openRecipe(id) {
 
       <h3>Let's make it</h3>
 
-      <p class="recipe-instructions">${instructions}</p>
+      <p class="recipe-instructions">
+        ${instructions}
+      </p>
 
       <div class="recipe-links">
+        ${fullRecipeLink}
         ${sourceLink}
         ${videoLink}
       </div>
@@ -253,7 +347,10 @@ async function openRecipe(id) {
   }
 }
 
-// Close modal
+// ========================================
+// CLOSE RECIPE MODAL
+// ========================================
+
 function closeModal() {
   if (!modal.classList.contains("open")) return;
 
@@ -265,8 +362,16 @@ function closeModal() {
   previousFocus?.focus();
 }
 
-// Recipe card click
+// ========================================
+// RECIPE CARD CLICK
+// ========================================
+
 grid.addEventListener("click", (event) => {
+  // Allow actual recipe links to navigate
+  if (event.target.closest(".recipe-page-link")) {
+    return;
+  }
+
   const card = event.target.closest(".recipe-card");
 
   if (card) {
@@ -274,18 +379,25 @@ grid.addEventListener("click", (event) => {
   }
 });
 
-// Keyboard accessibility for recipe cards
+// ========================================
+// RECIPE CARD KEYBOARD ACCESSIBILITY
+// ========================================
+
 grid.addEventListener("keydown", (event) => {
   if (
     (event.key === "Enter" || event.key === " ") &&
     event.target.matches(".recipe-card")
   ) {
     event.preventDefault();
+
     openRecipe(event.target.dataset.id);
   }
 });
 
-// Recipe search
+// ========================================
+// RECIPE SEARCH
+// ========================================
+
 $("#searchForm").addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -294,13 +406,20 @@ $("#searchForm").addEventListener("submit", (event) => {
   loadRecipes(query);
 });
 
-// Show all recipes
+// ========================================
+// SHOW ALL RECIPES
+// ========================================
+
 $("#showAllRecipes").addEventListener("click", () => {
   $("#searchInput").value = "";
+
   loadRecipes();
 });
 
-// Cuisine filtering
+// ========================================
+// CUISINE FILTERING
+// ========================================
+
 document.querySelectorAll(".cuisine-card").forEach((card) => {
   card.addEventListener("click", () => {
     $("#recipes").scrollIntoView({
@@ -311,8 +430,12 @@ document.querySelectorAll(".cuisine-card").forEach((card) => {
   });
 });
 
-// Modal controls
+// ========================================
+// MODAL CONTROLS
+// ========================================
+
 $("#modalClose").addEventListener("click", closeModal);
+
 $("#modalBackdrop").addEventListener("click", closeModal);
 
 // Escape key
@@ -322,7 +445,10 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-// Newsletter interaction
+// ========================================
+// NEWSLETTER INTERACTION
+// ========================================
+
 $("#newsletterForm").addEventListener("submit", (event) => {
   event.preventDefault();
 
@@ -340,26 +466,40 @@ $("#newsletterForm").addEventListener("submit", (event) => {
   }, 2500);
 });
 
-// Mobile navigation
+// ========================================
+// MOBILE NAVIGATION
+// ========================================
+
 menuToggle.addEventListener("click", () => {
   const isOpen = navLinks.classList.toggle("open");
 
-  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute(
+    "aria-expanded",
+    String(isOpen)
+  );
 });
 
 // Close mobile navigation after clicking a link
 navLinks.querySelectorAll("a").forEach((link) => {
   link.addEventListener("click", () => {
     navLinks.classList.remove("open");
-    menuToggle.setAttribute("aria-expanded", "false");
+
+    menuToggle.setAttribute(
+      "aria-expanded",
+      "false"
+    );
   });
 });
 
-// Scroll reveal
+// ========================================
+// SCROLL REVEAL
+// ========================================
+
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
       entry.target.classList.add("visible");
+
       revealObserver.unobserve(entry.target);
     }
   });
@@ -371,7 +511,10 @@ document.querySelectorAll(".reveal").forEach((element) => {
   revealObserver.observe(element);
 });
 
-// Intro animation and Three.js scene
+// ========================================
+// INTRO ANIMATION AND THREE.JS SCENE
+// ========================================
+
 window.addEventListener("load", () => {
   setTimeout(() => {
     $("#introScreen")?.remove();
@@ -391,12 +534,27 @@ window.addEventListener("load", () => {
   }
 });
 
-// Initialize 3D food scene
+// ========================================
+// INITIALIZE 3D FOOD SCENE
+// ========================================
+
 try {
   createFoodScene($("#food3d"));
 } catch (error) {
-  console.error("3D scene initialization failed:", error);
+  console.error(
+    "3D scene initialization failed:",
+    error
+  );
 }
 
-// Initial recipe loading
-loadRecipes();
+// ========================================
+// INITIALIZE FOODLY
+// ========================================
+
+async function initializeFoodly() {
+  await loadRecipePages();
+
+  await loadRecipes();
+}
+
+initializeFoodly();
