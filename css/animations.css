@@ -1,68 +1,50 @@
 
-/* FOODLY — ANIMATIONS */
+@keyframes introExit {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
 
 @keyframes marqueeMove {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-
-@keyframes introLine {
-  from { transform: scaleX(0.3); }
-  to { transform: scaleX(1); }
-}
-
-@keyframes floatFood {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50% { transform: translateY(-15px) rotate(3deg); }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 @keyframes rotateSlow {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.food-sticker {
-  animation: floatFood 4s ease-in-out infinite;
+@keyframes floatFood {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-.sticker-two {
-  animation-delay: 1.5s;
+.hero-stamp {
+  animation: floatFood 5s ease-in-out infinite;
+}
+
+.stamp-bottom {
+  animation-delay: 1s;
 }
 
 .newsletter-star {
-  animation: rotateSlow 15s linear infinite;
-}
-
-.reveal {
-  opacity: 0;
-  transform: translateY(35px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.cuisine-card,
-.recipe-card,
-.primary-button,
-.nav-button {
-  will-change: transform;
+  animation: rotateSlow 18s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
-    scroll-behavior: auto !important;
     animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
   }
 }
