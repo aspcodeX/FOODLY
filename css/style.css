@@ -858,3 +858,12 @@ img {
   outline: 2px solid var(--orange);
   outline-offset: 4px;
 }
+
+
+.fallback-food {
+  font-size: 150px;
+  display: grid;
+  place-items: center;
+  height: 100%;
+}
+
