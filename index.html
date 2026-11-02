@@ -1,45 +1,69 @@
 
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Primary SEO -->
   <title>FOODLY — Discover Delicious Recipes & Cooking Ideas</title>
 
   <meta name="description"
-    content="Discover delicious Italian, Japanese and Chinese recipes with FOODLY. Explore new flavours, find cooking inspiration and make every meal special.">
+    content="Discover delicious Italian, Japanese and Chinese recipes with FOODLY. Explore easy recipes, cooking inspiration and new flavours for your next meal.">
 
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <meta name="author" content="FOODLY Journal">
+  <meta name="theme-color" content="#f8f3e9">
 
   <link rel="canonical"
     href="https://foodly-seven-eta.vercel.app/">
 
-  <meta name="theme-color" content="#f8f3e9">
+  <!-- Search Engine Verification -->
+  <!-- Keep your existing Google verification HTML file in the root directory. -->
 
-  <!-- Open Graph -->
+  <!-- Open Graph SEO -->
   <meta property="og:type" content="website">
+  <meta property="og:site_name" content="FOODLY">
   <meta property="og:title" content="FOODLY — Good Food Is Good Art">
   <meta property="og:description"
     content="Discover delicious recipes, explore new flavours and make every meal special.">
   <meta property="og:url"
     content="https://foodly-seven-eta.vercel.app/">
 
-  <!-- Twitter -->
+  <!-- Add these after uploading the actual image -->
+  <!--
+  <meta property="og:image"
+    content="https://foodly-seven-eta.vercel.app/assets/images/og/foodly-cover.jpg">
+  <meta property="og:image:alt"
+    content="FOODLY recipe discovery website cover">
+  -->
+
+  <!-- Twitter SEO -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="FOODLY — Good Food Is Good Art">
   <meta name="twitter:description"
     content="Discover delicious recipes and cooking inspiration with FOODLY.">
 
-  <!-- Fonts -->
+  <!-- Add after uploading the actual image -->
+  <!--
+  <meta name="twitter:image"
+    content="https://foodly-seven-eta.vercel.app/assets/images/og/foodly-cover.jpg">
+  -->
+
+  <!-- Performance: Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap"
+    rel="stylesheet">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/animations.css">
   <link rel="stylesheet" href="css/responsive.css">
 
-  <!-- Three.js -->
+  <!-- Three.js Import Map -->
   <script type="importmap">
   {
     "imports": {
@@ -48,17 +72,22 @@
   }
   </script>
 </head>
+
 <body>
 
+  <!-- INTRO -->
   <div class="intro-screen" id="introScreen">
     <span class="intro-logo">FOODLY<span>.</span></span>
     <span class="intro-caption">A LITTLE FOOD PHILOSOPHY</span>
   </div>
 
+  <!-- NAVIGATION -->
   <header class="navbar">
-    <a href="#home" class="brand">FOODLY<span>.</span></a>
+    <a href="#home" class="brand" aria-label="FOODLY homepage">
+      FOODLY<span>.</span>
+    </a>
 
-    <nav class="nav-links" id="navLinks">
+    <nav class="nav-links" id="navLinks" aria-label="Main navigation">
       <a href="#discover">Discover</a>
       <a href="#recipes">Recipes</a>
       <a href="#about">Our story</a>
@@ -66,8 +95,13 @@
 
     <a href="#recipes" class="nav-cta">Find a recipe ↗</a>
 
-    <button class="menu-toggle" id="menuToggle">
-      <span></span><span></span>
+    <button class="menu-toggle"
+      id="menuToggle"
+      type="button"
+      aria-label="Toggle navigation"
+      aria-expanded="false">
+      <span></span>
+      <span></span>
     </button>
   </header>
 
@@ -77,7 +111,9 @@
     <section class="hero" id="home">
 
       <div class="hero-copy">
-        <p class="eyebrow">✳ FOODLY JOURNAL NO. 001 / ITALIAN EDITION</p>
+        <p class="eyebrow">
+          ✳ FOODLY JOURNAL NO. 001 / ITALIAN EDITION
+        </p>
 
         <h1>GOOD FOOD<br>IS <em>GOOD ART.</em></h1>
 
@@ -102,7 +138,10 @@
           100% DELICIOUS
         </div>
 
-        <div id="food3d" class="food3d"></div>
+        <div id="food3d"
+          class="food3d"
+          aria-label="Decorative 3D food illustration">
+        </div>
 
         <div class="hero-stamp stamp-bottom">
           MADE FRESH ✳
@@ -112,13 +151,14 @@
     </section>
 
     <!-- MARQUEE -->
-    <div class="marquee">
+    <div class="marquee" aria-label="Good food, good mood">
       <div class="marquee-track">
-        <span>
+        <span aria-hidden="true">
           GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
           GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
         </span>
-        <span>
+
+        <span aria-hidden="true">
           GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
           GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
         </span>
@@ -142,22 +182,46 @@
 
       <div class="cuisine-grid">
 
-        <button class="cuisine-card reveal" data-cuisine="Italian">
-          <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=1000&q=85" alt="Italian food">
+        <button class="cuisine-card reveal"
+          type="button"
+          data-cuisine="Italian">
+
+          <img
+            src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=1000&q=85"
+            alt="Italian cuisine and freshly prepared pasta"
+            loading="lazy"
+            decoding="async">
+
           <span class="cuisine-number">01</span>
           <span class="cuisine-title">Italian</span>
           <span class="cuisine-arrow">↗</span>
         </button>
 
-        <button class="cuisine-card reveal" data-cuisine="Japanese">
-          <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1000&q=85" alt="Japanese food">
+        <button class="cuisine-card reveal"
+          type="button"
+          data-cuisine="Japanese">
+
+          <img
+            src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1000&q=85"
+            alt="Japanese sushi cuisine"
+            loading="lazy"
+            decoding="async">
+
           <span class="cuisine-number">02</span>
           <span class="cuisine-title">Japanese</span>
           <span class="cuisine-arrow">↗</span>
         </button>
 
-        <button class="cuisine-card reveal" data-cuisine="Chinese">
-          <img src="https://www.eatthis.com/wp-content/uploads/sites/4/2019/02/general-tso-chicken.jpg?quality=82&strip=1" alt="Chinese food">
+        <button class="cuisine-card reveal"
+          type="button"
+          data-cuisine="Chinese">
+
+          <img
+            src="https://www.eatthis.com/wp-content/uploads/sites/4/2019/02/general-tso-chicken.jpg?quality=82&strip=1"
+            alt="Chinese-style chicken dish"
+            loading="lazy"
+            decoding="async">
+
           <span class="cuisine-number">03</span>
           <span class="cuisine-title">Chinese</span>
           <span class="cuisine-arrow">↗</span>
@@ -181,19 +245,46 @@
         </p>
       </div>
 
-      <form class="search-bar" id="searchForm">
-        <span>⌕</span>
-        <input id="searchInput" type="search" placeholder="Search pasta, chicken, dessert...">
+      <form class="search-bar"
+        id="searchForm"
+        role="search">
+
+        <label for="searchInput" class="visually-hidden">
+          Search recipes
+        </label>
+
+        <span aria-hidden="true">⌕</span>
+
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="Search pasta, chicken, dessert..."
+          autocomplete="off">
+
         <button type="submit">Search ↗</button>
       </form>
 
       <div class="recipe-toolbar">
-        <p id="recipeStatus">A few favourites to get you started.</p>
-        <button class="text-button" id="showAllRecipes">Show all recipes ↗</button>
+        <p id="recipeStatus" aria-live="polite">
+          A few favourites to get you started.
+        </p>
+
+        <button class="text-button"
+          id="showAllRecipes"
+          type="button">
+          Show all recipes ↗
+        </button>
       </div>
 
-      <div class="recipe-grid" id="recipeGrid">
-        <p class="api-message">Finding something delicious...</p>
+      <div class="recipe-grid"
+        id="recipeGrid"
+        aria-live="polite"
+        aria-busy="true">
+
+        <p class="api-message">
+          Finding something delicious...
+        </p>
+
       </div>
 
     </section>
@@ -202,12 +293,21 @@
     <section class="editorial-section" id="about">
 
       <div class="editorial-image">
-        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1400&q=85" alt="Kitchen">
+
+        <img
+          src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1400&q=85"
+          alt="Modern home kitchen and everyday cooking space"
+          loading="lazy"
+          decoding="async">
+
         <span>THE ART OF EVERYDAY COOKING</span>
       </div>
 
       <div class="editorial-copy">
-        <p class="eyebrow">03 / A LITTLE FOOD PHILOSOPHY</p>
+
+        <p class="eyebrow">
+          03 / A LITTLE FOOD PHILOSOPHY
+        </p>
 
         <h2>Cooking is an art.<br><em>Eating is a joy.</em></h2>
 
@@ -217,22 +317,41 @@
           make everyday meals feel special.
         </p>
 
-        <a href="#recipes" class="round-link">Explore recipes ↗</a>
-      </div>
+        <a href="#recipes" class="round-link">
+          Explore recipes ↗
+        </a>
 
+      </div>
     </section>
 
     <!-- NEWSLETTER -->
     <section class="newsletter-section">
+
       <p class="eyebrow">A NOTE FROM OUR KITCHEN</p>
 
       <h2>A little more<br><em>deliciousness.</em></h2>
 
-      <p>Good recipes, fresh inspiration. Straight to your inbox.</p>
+      <p>
+        Good recipes, fresh inspiration. Straight to your inbox.
+      </p>
 
       <form class="newsletter-form" id="newsletterForm">
-        <input type="email" placeholder="Your email address" required>
-        <button type="submit">Count me in ↗</button>
+
+        <label for="newsletterEmail" class="visually-hidden">
+          Your email address
+        </label>
+
+        <input
+          id="newsletterEmail"
+          type="email"
+          placeholder="Your email address"
+          autocomplete="email"
+          required>
+
+        <button type="submit">
+          Count me in ↗
+        </button>
+
       </form>
     </section>
 
@@ -242,12 +361,21 @@
   <footer class="footer">
 
     <div class="footer-top">
-      <a href="#home" class="brand">FOODLY<span>.</span></a>
+
+      <a href="#home"
+        class="brand"
+        aria-label="FOODLY homepage">
+        FOODLY<span>.</span>
+      </a>
+
       <p>Discover. Cook. Enjoy.</p>
+
       <a href="#home">BACK TO TOP ↑</a>
     </div>
 
-    <div class="footer-wordmark">FOODLY</div>
+    <div class="footer-wordmark" aria-hidden="true">
+      FOODLY
+    </div>
 
     <div class="footer-bottom">
       <span>© 2026 FOODLY JOURNAL</span>
@@ -258,20 +386,61 @@
   </footer>
 
   <!-- RECIPE MODAL -->
-  <div class="recipe-modal" id="recipeModal">
+  <div
+    class="recipe-modal"
+    id="recipeModal"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Recipe details"
+    aria-hidden="true">
+
     <div class="modal-backdrop" id="modalBackdrop"></div>
 
     <article class="modal-panel">
-      <button class="modal-close" id="modalClose">×</button>
+
+      <button
+        class="modal-close"
+        id="modalClose"
+        type="button"
+        aria-label="Close recipe">
+        ×
+      </button>
+
       <div id="modalBody"></div>
+
     </article>
   </div>
 
-  <div class="toast" id="toast"></div>
+  <!-- TOAST -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <!-- Accessibility helper -->
+  <style>
+    .visually-hidden {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 
+  <!-- GSAP -->
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+    defer>
+  </script>
+
+  <script
+    src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+    defer>
+  </script>
+
+  <!-- Main JavaScript -->
   <script type="module" src="js/main.js"></script>
 
 </body>
