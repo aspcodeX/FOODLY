@@ -2,11 +2,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#fff4e9" />
-  <title>FOODLY — Good food. Good mood.</title>
-  <meta name="description" content="Discover delicious recipes and explore the world of food with FOODLY." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FOODLY — Good Food Is Good Art</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,173 +17,237 @@
   <script type="importmap">
   {
     "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
-      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js"
     }
   }
   </script>
 </head>
 
 <body>
+
   <div class="intro-screen" id="introScreen">
-    <span>FOODLY</span>
-    <div class="intro-line"></div>
-    <small>GOOD FOOD. GOOD MOOD.</small>
+    <span class="intro-logo">FOODLY<span>.</span></span>
+    <span class="intro-caption">A LITTLE FOOD PHILOSOPHY</span>
   </div>
 
   <header class="navbar">
-    <a href="#" class="logo">foodly<span>.</span></a>
-    <nav class="nav-links">
-      <a href="#home">Home</a>
-      <a href="#explore">Explore</a>
+    <a href="#home" class="brand">FOODLY<span>.</span></a>
+
+    <nav class="nav-links" id="navLinks">
+      <a href="#discover">Discover</a>
       <a href="#recipes">Recipes</a>
-      <a href="#about">About</a>
+      <a href="#about">Our story</a>
     </nav>
-    <a href="#recipes" class="nav-button">Find your flavour ↗</a>
-    <button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">☰</button>
+
+    <a href="#recipes" class="nav-cta">Find a recipe ↗</a>
+
+    <button class="menu-toggle" id="menuToggle">
+      <span></span><span></span>
+    </button>
   </header>
 
   <main>
-    <section class="hero" id="home">
-      <div class="hero-copy">
-        <div class="journal-label">FOODLY JOURNAL NO. 001 / ITALIAN EDITION</div>
-        <div class="hero-doodles">🍅 🌿 🍝</div>
-        <div class="made-love">MADE WITH ♡ LOVE</div>
-        <div class="hero-art-note">GOOD FOOD IS GOOD ART. EST. 2026</div>
 
-        <p class="eyebrow">A LITTLE FOOD PHILOSOPHY</p>
-        <h1>Cooking is an art.<br><i>Eating is a joy.</i></h1>
+    <!-- HERO -->
+    <section class="hero" id="home">
+
+      <div class="hero-copy">
+        <p class="eyebrow">✳ FOODLY JOURNAL NO. 001 / ITALIAN EDITION</p>
+
+        <h1>GOOD FOOD<br>IS <em>GOOD ART.</em></h1>
+
         <p class="hero-description">
-          Great food doesn't need to be complicated. Explore new flavours,
-          try new recipes and make every meal a little more special.
+          Great food doesn't need to be complicated.
+          Explore new flavours, try new recipes and make
+          every meal a little more special.
         </p>
-        <a href="#explore" class="primary-button">Get inspired ↗</a>
-        <p class="hero-bottom-note">✦ DISCOVER. COOK. ENJOY.</p>
+
+        <a href="#discover" class="round-link">
+          Get inspired ↘
+        </a>
+
+        <div class="hero-footnote">
+          ✦ DISCOVER. COOK. ENJOY.
+        </div>
       </div>
 
       <div class="hero-visual">
-        <div class="food-sticker sticker-one">100% DELICIOUS</div>
-        <div class="food-sticker sticker-two">MADE FRESH ✳</div>
-        <div id="food3d"></div>
-        <div class="hero-visual-caption">A LITTLE BOWL OF HAPPINESS</div>
+
+        <div class="hero-stamp stamp-top">
+          100% DELICIOUS
+        </div>
+
+        <div id="food3d" class="food3d"></div>
+
+        <div class="hero-stamp stamp-bottom">
+          MADE FRESH ✳
+        </div>
+
       </div>
     </section>
 
+    <!-- MARQUEE -->
     <div class="marquee">
       <div class="marquee-track">
-        <span>GOOD FOOD ✳ GOOD MOOD ✳ MADE WITH LOVE ✳</span>
-        <span>GOOD FOOD ✳ GOOD MOOD ✳ MADE WITH LOVE ✳</span>
+        <span>
+          GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
+          GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
+        </span>
+        <span>
+          GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
+          GOOD FOOD, GOOD MOOD ✳ COOK WITH LOVE ✳
+        </span>
       </div>
     </div>
 
-    <section class="section explore-section" id="explore">
-      <div class="section-topline">✳ THE FOODLY EXPERIENCE</div>
-      <div class="section-heading">
+    <!-- CUISINES -->
+    <section class="section" id="discover">
+
+      <div class="section-heading reveal">
         <div>
-          <p class="eyebrow">A TASTE OF INSPIRATION</p>
-          <h2>Good things<br><i>are cooking.</i></h2>
+          <p class="eyebrow">01 / EXPLORE YOUR CRAVINGS</p>
+          <h2>A world of<br><em>flavours.</em></h2>
         </div>
-        <div class="section-intro">
-          <p>Get fresh food inspiration whenever you visit FOODLY. Discover something delicious every day.</p>
-          <a href="#recipes" class="text-link">Explore recipes ↗</a>
-        </div>
+
+        <p class="section-aside">
+          Three delicious destinations.<br>
+          One happy plate.
+        </p>
       </div>
 
       <div class="cuisine-grid">
-        <a href="#recipes" class="cuisine-card cuisine-american" data-cuisine="American">
-          <span class="cuisine-number">01 / CLASSICS</span>
-          <span class="cuisine-emoji">🍔</span>
-          <h3>American</h3>
+
+        <button class="cuisine-card reveal" data-cuisine="Italian">
+          <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=1000&q=85" alt="Italian food">
+          <span class="cuisine-number">01</span>
+          <span class="cuisine-title">Italian</span>
           <span class="cuisine-arrow">↗</span>
-        </a>
-        <a href="#recipes" class="cuisine-card cuisine-italian" data-cuisine="Italian">
-          <span class="cuisine-number">02 / COMFORT</span>
-          <span class="cuisine-emoji">🍝</span>
-          <h3>Italian</h3>
+        </button>
+
+        <button class="cuisine-card reveal" data-cuisine="Japanese">
+          <img src="https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=1000&q=85" alt="Japanese food">
+          <span class="cuisine-number">02</span>
+          <span class="cuisine-title">Japanese</span>
           <span class="cuisine-arrow">↗</span>
-        </a>
-        <a href="#recipes" class="cuisine-card cuisine-japanese" data-cuisine="Japanese">
-          <span class="cuisine-number">03 / FRESH</span>
-          <span class="cuisine-emoji">🍣</span>
-          <h3>Japanese</h3>
+        </button>
+
+        <button class="cuisine-card reveal" data-cuisine="Chinese">
+          <img src="https://images.unsplash.com/photo-1563240749-3f304a6b2f2e?auto=format&fit=crop&w=1000&q=85" alt="Chinese food">
+          <span class="cuisine-number">03</span>
+          <span class="cuisine-title">Chinese</span>
           <span class="cuisine-arrow">↗</span>
-        </a>
-        <a href="#recipes" class="cuisine-card cuisine-mexican" data-cuisine="Mexican">
-          <span class="cuisine-number">04 / BOLD</span>
-          <span class="cuisine-emoji">🌮</span>
-          <h3>Mexican</h3>
-          <span class="cuisine-arrow">↗</span>
-        </a>
+        </button>
+
       </div>
     </section>
 
+    <!-- RECIPES -->
     <section class="section recipes-section" id="recipes">
-      <div class="section-topline">✳ THE RECIPE COLLECTION</div>
-      <div class="section-heading">
+
+      <div class="section-heading reveal">
         <div>
-          <p class="eyebrow">SOMETHING GOOD IS HERE</p>
-          <h2>Made to be<br><i>devoured.</i></h2>
+          <p class="eyebrow">02 / THE GOOD STUFF</p>
+          <h2>Recipes worth<br><em>sharing.</em></h2>
         </div>
-        <a href="#search" class="text-link">Find something ↗</a>
-      </div>
-      <div class="recipe-grid" id="recipeGrid"></div>
-    </section>
 
-    <section class="editorial-section" id="about">
-      <div class="editorial-image">
-        <div class="editorial-emoji">🥬</div>
-        <span>FRESH IDEAS. FULL PLATES.</span>
+        <p class="section-aside">
+          Fresh ideas for your<br>
+          next kitchen adventure.
+        </p>
       </div>
-      <div class="editorial-copy">
-        <p class="eyebrow">OUR LITTLE FOOD PHILOSOPHY</p>
-        <h2>Life is too short<br>for <i>boring food.</i></h2>
-        <p>FOODLY is a little corner of the internet made for food lovers. Find inspiration, explore flavours and make everyday cooking more exciting.</p>
-        <a href="#recipes" class="primary-button">Let's explore ↗</a>
-      </div>
-    </section>
 
-    <section class="search-section" id="search">
-      <p class="eyebrow">YOUR NEXT FAVOURITE MEAL</p>
-      <h2>What's cooking<br><i>today?</i></h2>
-      <form id="searchForm" class="search-form">
-        <input id="searchInput" type="search" placeholder="Search a dish or ingredient..." aria-label="Search recipes">
+      <form class="search-bar" id="searchForm">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="Search pasta, chicken, dessert...">
         <button type="submit">Search ↗</button>
+      </form>
+
+      <div class="recipe-toolbar">
+        <p id="recipeStatus">A few favourites to get you started.</p>
+        <button class="text-button" id="showAllRecipes">Show all recipes ↗</button>
+      </div>
+
+      <div class="recipe-grid" id="recipeGrid">
+        <p class="api-message">Finding something delicious...</p>
+      </div>
+
+    </section>
+
+    <!-- ABOUT -->
+    <section class="editorial-section" id="about">
+
+      <div class="editorial-image">
+        <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1400&q=85" alt="Kitchen">
+        <span>THE ART OF EVERYDAY COOKING</span>
+      </div>
+
+      <div class="editorial-copy">
+        <p class="eyebrow">03 / A LITTLE FOOD PHILOSOPHY</p>
+
+        <h2>Cooking is an art.<br><em>Eating is a joy.</em></h2>
+
+        <p>
+          We believe the best memories are made around a table.
+          Discover new flavours, learn something delicious and
+          make everyday meals feel special.
+        </p>
+
+        <a href="#recipes" class="round-link">Explore recipes ↗</a>
+      </div>
+
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="newsletter-section">
+      <p class="eyebrow">A NOTE FROM OUR KITCHEN</p>
+
+      <h2>A little more<br><em>deliciousness.</em></h2>
+
+      <p>Good recipes, fresh inspiration. Straight to your inbox.</p>
+
+      <form class="newsletter-form" id="newsletterForm">
+        <input type="email" placeholder="Your email address" required>
+        <button type="submit">Count me in ↗</button>
       </form>
     </section>
 
-    <section class="newsletter-section">
-      <div class="newsletter-star">✳</div>
-      <p class="eyebrow">A LITTLE SOMETHING DELICIOUS</p>
-      <h2>Good things<br><i>are cooking.</i></h2>
-      <p>Discover something delicious every time you visit.</p>
-      <a href="#recipes" class="primary-button">Explore FOODLY ↗</a>
-    </section>
   </main>
 
+  <!-- FOOTER -->
   <footer class="footer">
+
     <div class="footer-top">
-      <a href="#" class="logo">foodly<span>.</span></a>
-      <p>GOOD FOOD. GREAT STORIES.<br>DISCOVER SOMETHING DELICIOUS ↗</p>
-    </div>
-    <div class="footer-wordmark">FOODLY</div>
-    <div class="footer-bottom">
-      <span>© 2026 FOODLY JOURNAL</span>
-      <span>MADE WITH ♡ FOR FOOD LOVERS</span>
+      <a href="#home" class="brand">FOODLY<span>.</span></a>
+      <p>Discover. Cook. Enjoy.</p>
       <a href="#home">BACK TO TOP ↑</a>
     </div>
+
+    <div class="footer-wordmark">FOODLY</div>
+
+    <div class="footer-bottom">
+      <span>© 2026 FOODLY JOURNAL</span>
+      <span>MADE WITH ♡ AND A LITTLE EXTRA SAUCE</span>
+      <span>GOOD FOOD IS GOOD ART.</span>
+    </div>
+
   </footer>
 
-  <div class="recipe-modal" id="recipeModal" aria-hidden="true">
-    <div class="modal-content">
-      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+  <!-- RECIPE MODAL -->
+  <div class="recipe-modal" id="recipeModal">
+    <div class="modal-backdrop" id="modalBackdrop"></div>
+
+    <article class="modal-panel">
+      <button class="modal-close" id="modalClose">×</button>
       <div id="modalBody"></div>
-    </div>
+    </article>
   </div>
 
   <div class="toast" id="toast"></div>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
   <script type="module" src="js/main.js"></script>
+
 </body>
 </html>
